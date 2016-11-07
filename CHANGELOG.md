@@ -1,3 +1,23 @@
+# 5.8.5 (2016-11-05)
+## Fix
+- Fix overlapping max and ceil labels in some cases (#396)
+
+# 5.8.4 (2016-11-05)
+## Improvement
+- Refactor autoHiding algorithm for labels (fix #446)
+
+# 5.8.3 (2016-11-03)
+## Improvement
+- Generate a SCSS file (simple copy of the css file) in the dist folder so it can be imported (#449)
+
+# 5.8.2 (2016-11-03)
+## Fix
+- Fix ceil label positioning (#448)
+
+# 5.8.1 (2016-10-27)
+## Fix
+- Enable using with Browserify (#436)
+
 # 5.8.0 (2016-10-22)
 ## Features
 - Handle Date object in stepsArray (#424 )
