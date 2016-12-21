@@ -1,7 +1,7 @@
 /*! angularjs-slider - v5.8.5 - 
  (c) Rafal Zajac <rzajac@gmail.com>, Valentin Hervieu <valentin@hervieu.me>, Jussi Saarivirta <jusasi@gmail.com>, Angelin Sirbu <angelin.sirbu@gmail.com> - 
  https://github.com/angular-slider/angularjs-slider - 
- 2016-11-05 */
+ 2016-12-21 */
 /*jslint unparam: true */
 /*global angular: false, console: false, define, module */
 (function(root, factory) {
@@ -161,7 +161,7 @@
      * @param {Element} sliderElem The slider directive element wrapped in jqLite
      * @constructor
      */
-    var Slider = function(scope, sliderElem) {
+    var Slider = function(scope, sliderElemContainer) {
       /**
        * The slider's scope
        *
@@ -182,11 +182,18 @@
       this.highValue = 0;
 
       /**
+       * Slider container element wrapped in jqLite
+       *
+       * @type {jqLite}
+       */
+      this.container = sliderElemContainer;
+
+      /**
        * Slider element wrapped in jqLite
        *
        * @type {jqLite}
        */
-      this.sliderElem = sliderElem;
+      this.sliderElem = sliderElemContainer.contents();
 
       /**
        * Slider type
@@ -350,6 +357,7 @@
         };
 
         this.applyOptions();
+        this.applyContainerClasses();
         this.syncLowValue();
         if (this.range)
           this.syncHighValue();
@@ -396,6 +404,7 @@
           if (newValue === oldValue)
             return;
           self.applyOptions(); // need to be called before synchronizing the values
+          self.applyContainerClasses();
           self.syncLowValue();
           if (self.range)
             self.syncHighValue();
@@ -536,6 +545,16 @@
         this.updateTicksScale();
         this.updateCmbLabel();
         this.updateAriaAttributes();
+      },
+
+      /**
+       * Add classes to the container and its verticality
+       */
+      applyContainerClasses: function(){
+        this.container.addClass('rzslider-container');
+        if (this.options.vertical) {
+          this.container.addClass('rz-vertical');
+        }
       },
 
       /**
@@ -2224,7 +2243,7 @@
     return Slider;
   }])
 
-  .directive('rzslider', ['RzSlider', function(RzSlider) {
+  .directive('rzslider', ['RzSlider', '$compile', '$http', '$templateCache', function(RzSlider, $compile, $http, $templateCache) {
     'use strict';
 
     return {
@@ -2237,20 +2256,24 @@
         rzSliderTplUrl: '@'
       },
 
-      /**
-       * Return template URL
-       *
-       * @param {jqLite} elem
-       * @param {Object} attrs
-       * @return {string}
-       */
-      templateUrl: function(elem, attrs) {
-        //noinspection JSUnresolvedVariable
-        return attrs.rzSliderTplUrl || 'rzSliderTpl.html';
-      },
-
       link: function(scope, elem) {
-        scope.slider = new RzSlider(scope, elem); //attach on scope so we can test it
+        if(!angular.isDefined(scope.rzSliderTplUrl)){
+          scope.rzSliderTplUrl = 'rzSliderTpl.html';
+        }
+        scope.$watch('rzSliderTplUrl', function (value) {
+          if (value) {
+            loadTemplate(value);
+          }
+        });
+
+        function loadTemplate(template) {
+            $http.get(template, { cache: $templateCache })
+              .success(function(templateContent) {
+                elem.html(templateContent);
+                $compile(elem.contents())(scope);
+                scope.slider = new RzSlider(scope, elem); //attach on scope so we can test it
+              });
+        }
       }
     };
   }]);

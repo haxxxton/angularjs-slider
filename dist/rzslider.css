@@ -1,7 +1,7 @@
-/*! angularjs-slider - v5.8.0 - 
+/*! angularjs-slider - v5.8.5 - 
  (c) Rafal Zajac <rzajac@gmail.com>, Valentin Hervieu <valentin@hervieu.me>, Jussi Saarivirta <jusasi@gmail.com>, Angelin Sirbu <angelin.sirbu@gmail.com> - 
  https://github.com/angular-slider/angularjs-slider - 
- 2016-10-25 */
+ 2016-12-21 */
 .rzslider-container {
   display: inline-block;
   width: 100%;
@@ -152,14 +152,6 @@
   color: #55637d;
 }
 
-.rzslider .rz-bubble.rz-floor {
-  left: 0;
-}
-
-.rzslider .rz-bubble.rz-ceil {
-  right: 0;
-}
-
 .rzslider .rz-ticks {
   position: absolute;
   top: -3px;
@@ -254,16 +246,6 @@
 .rzslider.rz-vertical .rz-bubble.rz-selection {
   top: auto;
   left: 16px !important;
-}
-
-.rzslider.rz-vertical .rz-bubble.rz-floor {
-  bottom: 0;
-  left: auto;
-}
-
-.rzslider.rz-vertical .rz-bubble.rz-ceil {
-  top: 0;
-  right: auto;
 }
 
 .rzslider.rz-vertical .rz-ticks {
